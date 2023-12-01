@@ -20,7 +20,7 @@ public class PlayerBullet : MonoBehaviour
         Transform hitTransform = collision.transform;
         if (hitTransform.CompareTag("Enemy"))
         {
-            Debug.Log("Hit Enemy");
+            //Debug.Log("Hit Enemy");
            hitTransform.GetComponent<EnemyHealth>().TakeDamageEnemy(10);
         }
        

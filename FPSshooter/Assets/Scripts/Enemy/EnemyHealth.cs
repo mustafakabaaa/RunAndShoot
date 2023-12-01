@@ -9,7 +9,6 @@ public class EnemyHealth : MonoBehaviour
     private float health;
     public float lerpTimer;
     public float maxHealth = 100f;
-   
     [SerializeField]
     private UnityEngine.UI.Image healthBarSprite;
     // Start is called before the first frame update
@@ -36,7 +35,7 @@ public class EnemyHealth : MonoBehaviour
         health=Mathf.Clamp(health, 0, maxHealth);
         //UpdateHealthEnemyUI();
         
-        Debug.Log("Enemy Shoot");
+        //Debug.Log("Enemy Shoot");
     }
     public void UpdateHealthBArEnemy(float maxhealth,float currentHealth)
     {

@@ -15,7 +15,8 @@ public class PlayerFire : MonoBehaviour
     private GameObject muzzleFlashInstance;
     public float eyeHeight = 1.5f;
     public float eyeHeight2 = 5f;
-    
+    private Enemy enemy;
+    private bool isFire;
     public AudioSource fireSound;
     Vector3 shootDirection;
 
@@ -23,7 +24,7 @@ public class PlayerFire : MonoBehaviour
     {
         motor = FindObjectOfType<PlayerMotor>();
         playerAmmo = GetComponent<PlayerAmmo>();
-        
+        enemy = FindObjectOfType<Enemy>(); // enemy deðiþkenini baþlatýn
         if (motor == null)
         {
             Debug.LogError("PlayerMotor not found in the scene!");
@@ -40,17 +41,22 @@ public class PlayerFire : MonoBehaviour
 
         if (Input.GetMouseButton(0) && shootTimer >= fireRate && playerAmmo.CanShoot() && !playerAmmo.isReloading)
         {
+            isFire = true;
             playerAmmo.Shoot();
             shootTimer = 0f;
             FireGun();
+            
+            //ateþ edildigini haber ver
         }
         else
         {
+            isFire = false;
         }
     }
     void FireGun()
     {
         fireSound.Play();
+
     }
 
     public void Shoot()

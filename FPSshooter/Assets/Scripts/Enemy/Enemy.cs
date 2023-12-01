@@ -72,5 +72,12 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
+    
 
+    public void OnSoundDetected()
+    {
+        Debug.Log("OnSoundDetected function is called.");
+        // Diðer iþlemleri buraya ekleyin
+        stateMachine.ChangeState(new AttackState());
+    }
 }

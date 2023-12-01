@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public float chipSpeed = 2f;
     public AudioSource medicSound;
     public Image healthBar;
+    private bool canHeal=true;
 
     public DamageIndicator damageIndicator;
     void Start()
@@ -23,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
     {
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
+        //Debug.Log(health);
        
     }
     public void UpdateHealthUI()
@@ -43,11 +45,25 @@ public class PlayerHealth : MonoBehaviour
             healthBar.fillAmount = hFraction; // Health artýyorsa, direkt olarak hFraction'a ayarla
         }
     }
-    public void Medic(float healTime)
+    public void Medic(float medica)
     {
-        float medica=25f;
-        StartCoroutine(MedicCoroutine(medica, healTime));
-        medicSound.Play();
+        if (canHeal)
+        {
+            float maxHealtPlus = 45;
+            if (medica > maxHealtPlus)
+            {
+                medica = maxHealtPlus;
+            }
+            float healTime = 10f;
+            StartCoroutine(MedicCoroutine(medica, healTime));
+            medicSound.Play();
+            canHeal = false;
+        }
+        else
+        {
+
+        }
+       
     }
 
 
@@ -65,22 +81,27 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-   
 
-    private IEnumerator MedicCoroutine(float medica, float healTime)
+
+    private IEnumerator MedicCoroutine(float medica, float totalHealTime)
     {
-        float stratingHEalth = health;
-        float targetHealth=Mathf.Clamp(health+medica, 0, maxHealth);
+        float startingHealth = health;
+        float targetHealth = Mathf.Clamp(health + medica, 0, maxHealth);
 
         float elapsedTime = 0f;
 
-        while (elapsedTime < healTime)
+        while (elapsedTime < totalHealTime)
         {
-            healTime = Mathf.Lerp(stratingHEalth, targetHealth, elapsedTime / healTime);
-            UpdateHealthUI() ;
+            health = Mathf.Lerp(startingHealth, targetHealth, elapsedTime / totalHealTime);
+            UpdateHealthUI();
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
+
         health = targetHealth;
         UpdateHealthUI();
+        canHeal = true;
     }
+
+
 }
