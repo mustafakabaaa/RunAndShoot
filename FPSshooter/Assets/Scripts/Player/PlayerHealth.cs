@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
-    private float health;
+    public float health;
     public float lerpTimer;
     public float maxHealth = 100f;
     public float chipSpeed = 2f;
@@ -24,8 +25,23 @@ public class PlayerHealth : MonoBehaviour
     {
         health = Mathf.Clamp(health, 0, maxHealth);
         UpdateHealthUI();
+
+        if (health <= 0)
+        {
+            PlayerDead();
+        }
         //Debug.Log(health);
+        if (transform.position.y<=-50) 
+        {
+            health -= 50;
+        
+        }
        
+    }
+    void PlayerDead()
+    {
+        // Oyuncu öldüðünde yapýlacak iþlemler burada olacak
+        Debug.Log("Oyuncu öldü!");
     }
     public void UpdateHealthUI()
     {
@@ -54,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
             {
                 medica = maxHealtPlus;
             }
-            float healTime = 10f;
+            float healTime = 3f;
             StartCoroutine(MedicCoroutine(medica, healTime));
             medicSound.Play();
             canHeal = false;

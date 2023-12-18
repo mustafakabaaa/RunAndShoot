@@ -11,33 +11,46 @@ public class PlayerMotor : MonoBehaviour
     private bool isGrounded;
     public float gravity = -9.8f;
     public Transform playerGunBarrel;
-    
+
     private AudioSource footstepsAudioSource;
-    private float originalPitch=1.3f;
+    private float originalPitch = 1.3f;
 
     [Header("SOUND CONTROL")]
     public AudioSource jumpSound;
     public GameObject footstepSound;
     public float walkSpeedSound = 1.3f;
     public float runSpeedSound = 1.8f;
+
+    private bool isSprinting = false;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
         footstepsAudioSource = footstepSound.GetComponent<AudioSource>();
         originalPitch = footstepsAudioSource.pitch;
         footstepSound.SetActive(false);
+        if (Cursor.lockState == CursorLockMode.Locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     void Update()
     {
         isGrounded = controller.isGrounded;
-       
 
+        if (isGrounded)
+        {
+            // Karakter yere basýlýyken koþma iþlemini kontrol et
+            isSprinting = Input.GetKey(KeyCode.LeftShift);
+        }
+        
+      
     }
 
     public void ProcessMove(Vector2 input)
     {
-        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+        float currentSpeed = isSprinting ? runSpeed : walkSpeed;
 
         Vector3 moveDirection = new Vector3(input.x, 0, input.y);
         controller.Move(transform.TransformDirection(moveDirection) * currentSpeed * Time.deltaTime);
@@ -57,7 +70,7 @@ public class PlayerMotor : MonoBehaviour
             footstepSound.SetActive(true);
 
             // Hýzlandýrma için pitch'i güncelle
-            float speedFactor = Input.GetKey(KeyCode.LeftShift) ? runSpeedSound : walkSpeedSound;
+            float speedFactor = isSprinting ? runSpeedSound : walkSpeedSound;
             footstepsAudioSource.pitch = speedFactor;
         }
         else
@@ -66,14 +79,13 @@ public class PlayerMotor : MonoBehaviour
         }
     }
 
-
     public void JumpFNC()
     {
         if (isGrounded)
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
-            
-            if (jumpSound!=null)
+
+            if (jumpSound != null)
             {
                 jumpSound.Play();
             }
