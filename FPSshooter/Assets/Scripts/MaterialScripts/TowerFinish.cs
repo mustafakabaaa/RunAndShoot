@@ -10,7 +10,7 @@ public class TowerFinish : MonoBehaviour
     {
         if(other.CompareTag("Player")) {
 
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(5);
         }
     }
 }

@@ -18,6 +18,7 @@ public class PlayerFire : MonoBehaviour
     private Enemy enemy;
     private bool isFire;
     public AudioSource fireSound;
+    [SerializeField] private float bulletSpeed=80f;
     Vector3 shootDirection;
 
     void Start()
@@ -75,7 +76,7 @@ public class PlayerFire : MonoBehaviour
             GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/PlayerBullet") as GameObject, gunBarrel.position, Quaternion.LookRotation(hitInfo.point - gunBarrel.position));
 
             Vector3 shootDirection = (hitInfo.point - gunBarrel.transform.position).normalized;
-            bullet.GetComponent<Rigidbody>().velocity = shootDirection * 40;
+            bullet.GetComponent<Rigidbody>().velocity = shootDirection * bulletSpeed;
 
             if (muzzleFlashPrefab != null)
             {
@@ -104,7 +105,7 @@ public class PlayerFire : MonoBehaviour
             
             GameObject bullet = GameObject.Instantiate(Resources.Load("Prefabs/PlayerBullet") as GameObject, gunBarrel.position, Quaternion.LookRotation(shootDirection));
 
-            bullet.GetComponent<Rigidbody>().velocity = shootDirection.normalized * 40;
+            bullet.GetComponent<Rigidbody>().velocity = shootDirection.normalized * bulletSpeed;
             
             if (Physics.Raycast(adjustedRay, out adjustedHitInfo, 100))
             {
